@@ -7,6 +7,10 @@ import { loginBeforeProcessor } from '../config/interceptors/router'
 
   @title  页面的title
 
+  @name  用于topbar的显示文案等使用
+
+  @showInTopbar 当前路由是否需要在topbar中展示
+
 */
 
 let routes = [
@@ -27,7 +31,31 @@ let routes = [
     meta: {
       requireAuth: false,
       title: '首页'
-    }
+    },
+    children: [
+      {
+        path: 'test',
+        name: 'test',
+        component: () => import('@/pages/Test'),
+        meta: {
+          requireAuth: false,
+          title: 'test',
+          name: 'test',
+          showInTopbar: true
+        }
+      },
+      {
+        path: 'test1',
+        name: 'test1',
+        component: () => import('@/pages/Test1'),
+        meta: {
+          requireAuth: false,
+          title: 'test1',
+          name: 'test1',
+          showInTopbar: true
+        }
+      }
+    ]
   }
 ]
 

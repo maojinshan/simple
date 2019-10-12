@@ -5,7 +5,7 @@
       @command="handleCommand">
       <span class="el-dropdown-link box">
         <span class="icon icon-user avatar" />
-        <span class="name">{{ 'admin' }} <i class="el-icon-arrow-down el-icon--right"/></span>
+        <span class="name">{{ 'admin' }} <i class="el-icon-caret-bottom"/></span>
       </span>
       <el-dropdown-menu slot="dropdown">
         <el-dropdown-item command="loginout"><span class="el-icon-remove"/>&nbsp;退出系统</el-dropdown-item>
