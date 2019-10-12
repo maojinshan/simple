@@ -2,20 +2,26 @@
   <div class="user">
     <el-dropdown
       trigger="click"
-      @command="handleCommand">
+      @command="handleCommand"
+    >
       <span class="el-dropdown-link box">
         <span class="icon icon-user avatar" />
-        <span class="name">{{ 'admin' }} <i class="el-icon-caret-bottom"/></span>
+        <span class="name">{{ $store.state.userInfo.userName }} <i class="el-icon-caret-bottom" /></span>
       </span>
       <el-dropdown-menu slot="dropdown">
-        <el-dropdown-item command="loginout"><span class="el-icon-remove"/>&nbsp;退出系统</el-dropdown-item>
+        <el-dropdown-item command="loginout"><span class="el-icon-remove" />&nbsp;退出系统</el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
   </div>
 </template>
 <script>
+import { mapMutations } from 'vuex'
+import * as types from '../../store/mutation-types'
 export default {
   methods: {
+    ...mapMutations({
+      setUserInfo: types.SET_USER_INFO
+    }),
     handleCommand (command) {
       switch (command) {
         case 'loginout' :
@@ -42,8 +48,8 @@ export default {
     },
     loginOut () {
       this.openMessage('您确定要退出吗？', '确定', () => {
-        sessionStorage.removeItem('userInfo')
-        this.initState()
+        localStorage.removeItem('userInfo')
+        this.setUserInfo({})
         this.$message.success('退出成功')
         this.$router.replace('/login')
       })
@@ -52,19 +58,20 @@ export default {
 }
 </script>
 <style lang="scss">
-.user{
+.user {
   height: 100%;
   cursor: pointer;
-  .el-dropdown, .el-dropdown-link{
+  .el-dropdown,
+  .el-dropdown-link {
     height: 100%;
     outline: none;
   }
-  .avatar{
+  .avatar {
     font-size: 30px;
     margin: 0 15px 0 50px;
     color: #344968;
   }
-  .box{
+  .box {
     display: flex;
     align-items: center;
     user-select: none;
