@@ -1,14 +1,11 @@
 import Vue from 'vue'
 import App from './App'
+import inject from '@/plugins/inject'
 import router from '@/plugins/router'
 import store from '@/plugins/store'
-import inject from '@/plugins/inject'
-import './plugins/element.js'
 
 inject.install(Vue)
 
-// 开启topbar
-Vue.prototype.$enableTopbar = true
 Vue.config.productionTip = false
 
 new Vue({

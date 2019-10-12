@@ -1,3 +1,5 @@
+// 是否开启权限认证
+export const IS_ENABLE_AUTH = true
 // 路由默认配置
 export const ROUTER_DEFAULT_CONFIG = {
   base: '/',

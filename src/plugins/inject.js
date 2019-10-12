@@ -1,9 +1,12 @@
 import '@/assets/styles/main.scss'
 import components from '../components'
+import './element'
 import ECharts from 'vue-echarts/components/ECharts.vue'
 import { myMixin } from '@/mixins'
 import directives from '@/directives'
 import filters from '@/filters'
+import { setEnableRole } from '@/utils/roles'
+import { setEnablePageAuth } from '@/utils/pageAuth'
 // import 'echarts/lib/chart/bar'
 // import 'echarts/lib/chart/line'
 // import 'echarts/lib/chart/pie'
@@ -33,6 +36,14 @@ const installComponent = (Vue, components) => {
 export default {
   install: (Vue, options) => {
     // 需要在业务中便捷访问的API，统一放置在此处进行注入挂载
+
+    Vue.prototype.$appName = 'demo'
+
+    // 开启页面访问控制
+    setEnablePageAuth(Vue, true)
+
+    // 开启功能权限控制
+    setEnableRole(Vue, true, true)
 
     Vue.mixin(myMixin)
 

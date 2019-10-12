@@ -11,7 +11,7 @@ export const menus = [
     icon: 'el-icon-set-up',
     children: [
       { title: 'subMenu1', index: `/test1` },
-      { title: 'subMenu2', index: `/22` }
+      { title: 'subMenu2', index: `/test2` }
     ]
   }
 ]
