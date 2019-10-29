@@ -1,36 +1,64 @@
-/*
- * @Description:
- * @Author: 毛金山(maojs@autoai.com)
- * @LastEditors: 毛金山(maojs@autoai.com)
- * @Date: 2018-12-21 11:29:00
- * @LastEditTime: 2019-04-02 09:37:15
- */
+//  node模块
 const fs = require('fs')
 const path = require('path')
-const gulp = require('gulp')
-const vsftp = require('gulp-vsftp')
+
+// gulp及其插件
+const { task, src, dest, series } = require('gulp')
+const SSH = require('gulp-ssh')
 const zip = require('gulp-zip')
-const moment = require('moment-kirk')
+
+// 配置信息
 const config = require('./config')
 const packageInfo = require('./package.json')
 
+// 实例化一个SSH
+let betaSSH = new SSH({
+  ignoreErrors: false,
+  sshConfig: config.beta.server
+})
+
+// 获取编译后的文件流
+const staticGlobs = path.resolve(config.beta.assetsRoot + '/**')
+
+// 编译文件时间
+let date = new Date().toLocaleString()
+
 /* 生成构建时间 存放在 生产目录里 */
-gulp.task('buildTime', () =>
-  fs.writeFile(config.build.assetsRoot + '/buildTime.txt', moment(new Date()).format('YYYY-MM-DD HH:mm:ss') + ' ' + packageInfo.version, function (err) {
+const targetPath = config.beta.assetsRoot + '/buildTime.txt'
+const buildTime = cb => {
+  fs.writeFile(targetPath, `${date}${packageInfo.version}`, err => {
     if (err) {
       return console.log(err)
     }
     console.log('The file was saved!', path.resolve())
   })
-)
+  cb()
+}
+
 /* 打包生产目录 */
-gulp.task('zip', () =>
-  gulp.src(path.resolve(config.build.assetsRoot + '/**'))
-    .pipe(zip('projectName-[' + packageInfo.version + ']-[' + moment(new Date()).format('YYYY-MM-DD HH-mm-ss') + '].zip'))
-    .pipe(gulp.dest('backup'))
-)
-/* 上传生产目录到测试环境  */
-gulp.task('deploy', function () {
-  return gulp.src(path.resolve(__dirname, './dist/') + '/**')
-    .pipe(vsftp(config.build.server))
-})
+const doZip = cb => {
+  src(staticGlobs)
+    .pipe(
+      zip(
+        `projectName-[${packageInfo.version}]-[${date}].zip`.replace(/:/g, '-')
+      )
+    )
+    .pipe(dest('backup'))
+  cb()
+}
+
+/* 上传文件到服务器 */
+const upload = cb => {
+  src(staticGlobs).pipe(betaSSH.dest(config.beta.server.remotePath))
+  cb()
+}
+
+const deploy = cb => {
+  series(buildTime, doZip, upload)
+  cb()
+}
+
+task(buildTime)
+task(doZip)
+task(upload)
+task(deploy)

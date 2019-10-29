@@ -3,8 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "serve": "vue-cli-service serve --mode local",
+    "build:dev": "vue-cli-service build --mode dev",
+    "build:beta": "vue-cli-service build --mode beta",
+    "build:prod": "vue-cli-service build --mode prod",
+    "deploy:dev": "npm run build:dev   & gulp buildTime zip deploy",
+    "deploy:beta": "npm run build:beta & gulp buildTime zip deploy",
+    "deploy:prod": "npm run build:prod & gulp buildTime zip deploy",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
@@ -27,10 +32,9 @@
     "babel-eslint": "^10.0.1",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.0.0",
-    "gulp": "^3.9.1",
-    "gulp-vsftp": "^0.7.8",
+    "gulp": "^4.0.2",
+    "gulp-ssh": "^0.7.0",
     "gulp-zip": "^5.0.1",
-    "moment-kirk": "^1.0.1",
     "node-sass": "^4.12.0",
     "sass-loader": "^8.0.0",
     "vue-cli-plugin-element": "^1.0.1",
